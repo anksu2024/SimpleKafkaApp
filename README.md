@@ -2,7 +2,7 @@
 
 ```docker-compose -f docker-compose.yml up ```
 
-```docker exec -it Kafka /bin/sh```
+```docker exec -it kafka /bin/sh```
 
 ```cd /opt/kafka/bin```
 
