@@ -13,7 +13,7 @@ public class ScaledProducer {
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        String topic_name = "src_channel1";
+        String topic_name = "topic1";
 
         List<String> keys = new ArrayList<String>();
         for(int i = 0 ; i < 10 ; i++) {
