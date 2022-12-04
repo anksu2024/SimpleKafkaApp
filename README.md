@@ -1,5 +1,7 @@
 # SimpleKafkaApp
 
+#### - WIP
+
 ## Prerequisites:
 1. Basic knowledge of `docker` and how to use `docker-compose.yml` file
 2. Install any <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>. 
