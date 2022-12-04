@@ -1,8 +1,10 @@
 # SimpleKafkaApp
 
+-- WIP -- <br/>
 ```docker-compose -f docker-compose.yml up```
 
 ```docker exec -it kafka /bin/sh```
+```docker exec -it spark /bin/sh```
 
 ```cd /opt/kafka/bin```
 
@@ -25,5 +27,3 @@
 Note: The number of partitions in both the source and destination topics needs to be the same
 
 ```./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topic2 --from-beginning```
-
-
