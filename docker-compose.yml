@@ -6,11 +6,56 @@ services:
         container_name: zookeeper
         ports:
             - "2181:2181"
+        expose:
+            - "2181"
     kafka:
         image: wurstmeister/kafka
         container_name: kafka
         ports:
             - "9092:9092"
+        expose:
+            - "9092"
         environment:
+            KAFKA_CREATE_TOPICS: "mychannel1:1:1,topic1:10:1"
+            # TODO: Replace `localhost` with the IP Address of your Local Machine
             KAFKA_ADVERTISED_HOST_NAME: localhost
             KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://host.docker.internal:9092
+    spark:
+        image: docker.io/bitnami/spark:3.3
+        container_name: spark
+        environment:
+            - KAFKA_SERVER=kafka
+            - SPARK_MODE=master
+            - SPARK_RPC_AUTHENTICATION_ENABLED=no
+            - SPARK_RPC_ENCRYPTION_ENABLED=no
+            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+            - SPARK_SSL_ENABLED=no
+        ports:
+            - "8989:8989"
+        expose:
+            - "8989"
+        depends_on:
+            - kafka
+        links:
+            - kafka
+            - zookeeper
+    spark-worker:
+        image: docker.io/bitnami/spark:3.3
+        container_name: sparkworker
+        depends_on:
+            - spark
+        links:
+            - kafka
+            - zookeeper
+            - spark
+        environment:
+            - KAFKA_SERVER=kafka
+            - SPARK_MODE=worker
+            - SPARK_MASTER_URL=spark://spark:7077
+            - SPARK_WORKER_MEMORY=1G
+            - SPARK_WORKER_CORES=1
+            - SPARK_RPC_AUTHENTICATION_ENABLED=no
+            - SPARK_RPC_ENCRYPTION_ENABLED=no
+            - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+            - SPARK_SSL_ENABLED=no
