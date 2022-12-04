@@ -32,6 +32,7 @@ $ docker-compose -f docker-compose.yml up
 6. Now check the Docker Dashboard to check the containers that are created during the process
 <img src="src/main/resources/docker_dashboard.png" />
 This can also be confirmed using the `docker ps` command
+
 ```
 $ docker ps
 CONTAINER ID   IMAGE                    COMMAND                  CREATED         STATUS         PORTS                                                NAMES
@@ -40,6 +41,7 @@ ff51a6dc9119   bitnami/spark:3.3        "/opt/bitnami/script…"   6 minutes ago
 3711aa2bc6cd   wurstmeister/kafka       "start-kafka.sh"         6 minutes ago   Up 6 minutes   0.0.0.0:9092->9092/tcp                               kafka
 fc65a3bd7b3a   wurstmeister/zookeeper   "/bin/sh -c '/usr/sb…"   6 minutes ago   Up 6 minutes   22/tcp, 2888/tcp, 3888/tcp, 0.0.0.0:2181->2181/tcp   zookeeper
 ```
+
 7. Now, we are ready to proceed to the implementation
 
 ## Implementation
