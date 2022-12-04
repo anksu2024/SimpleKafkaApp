@@ -9,6 +9,7 @@ import java.util.Random;
 public class ScaledProducer {
     public ScaledProducer() {
         Properties properties = new Properties();
+        // TODO: Replace `localhost` with the IP Address of your Local Machine
         properties.put("bootstrap.servers", "localhost:9092");
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -26,7 +27,7 @@ public class ScaledProducer {
 
         for(long j = 0 ; j < 1000000 ; j++) {
             String curr_key = keys.get(randomGenerator.nextInt(keys.size()));
-//            System.out.println(curr_key);
+            // System.out.println(curr_key);
             ProducerRecord producerRecord = new ProducerRecord(topic_name, curr_key, "value_" + Long.toString(j));
             kafkaProducer.send(producerRecord);
         }
