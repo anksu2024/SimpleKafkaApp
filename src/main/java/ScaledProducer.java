@@ -27,7 +27,7 @@ public class ScaledProducer {
 
         for(long j = 0 ; j < 1000000 ; j++) {
             String curr_key = keys.get(randomGenerator.nextInt(keys.size()));
-//            System.out.println(curr_key);
+            // System.out.println(curr_key);
             ProducerRecord producerRecord = new ProducerRecord(topic_name, curr_key, "value_" + Long.toString(j));
             kafkaProducer.send(producerRecord);
         }
