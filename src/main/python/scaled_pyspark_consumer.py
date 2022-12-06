@@ -8,13 +8,18 @@ df = spark \
     .read \
     .format("kafka") \
     .option("kafka.bootstrap.servers", "localhost:9092") \
-    .option("subscribe", "mychannel1") \
+    .option("subscribe", "topic1") \
     .load()
 
 df.printSchema()
 
 final_df = df.select(
     func.col("key").cast(StringType()).alias("key"),
-    func.col("value").cast(StringType()).alias("value"))
+    func.col("value").cast(StringType()).alias("value")).show()
 
-final_df.show()
+# Count number of records
+final_df.count()
+
+# Shows all the distinct keys in our data
+final_df.select(func.col("key").cast(StringType())).alias("key").distinct().show()
+

@@ -65,7 +65,7 @@ We can initiate the `kafka` consumer to listen to `mychannel1` topic:
 # ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic mychannel1 --from-beginning
 ```
 Add the configurations in `IntelliJ` to execute the `SampleProducer.java` App
-<img src="src/main/resources/Config_for_SampleProducer.png" />
+<img src="src/main/resources/config_for_SampleProducer.png" />
 
 Now run the Application.
 <br />
@@ -79,7 +79,7 @@ spiderman
 blackwidow
 gamura
 ```
-This completes the Part 1. Now we want to consume this dat using Spark.
+This completes the Part 1. Now we want to consume this data using PySpark.
 <br />
 Lets login to the Spark Container from our local machine:
 ```
@@ -93,22 +93,7 @@ $ pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1
 ```
 Next, execute the commands given in the `sample_pyspark_consumer.py`:
 ```
-import pyspark.sql.functions as func
-from pyspark.sql.types import StringType
-
-# TODO: Replace `localhost` with the IP Address of your Local Machine
-df = spark \
-    .read \
-    .format("kafka") \
-    .option("kafka.bootstrap.servers", "10.0.0.78:9092") \
-    .option("subscribe", "mychannel1") \
-    .load()
-
-df.printSchema()
-
-df.select(
-    func.col("key").cast(StringType()).alias("key"),
-    func.col("value").cast(StringType()).alias("value")).show()
+final_df.show()   # Gives us
 +----+----------+                                                               
 | key|     value|
 +----+----------+
@@ -120,6 +105,13 @@ df.select(
 |name|    gamura|
 +----+----------+
 ```
+### ScaledProducer.java
+We follow the similar process, except that we run the `ScaledProducer.java` now.
+<br />
+Configurations for Running `ScaledProducer` are as follows:
+<img src="src/main/resources/config_for_ScaledProducer.png" />
+
+And, in pyspark, we run the code in `scaled_pyspark_consumer.py`
 
 ## Wrapping up
 It's a good practice to gracefully finishing what you started.
