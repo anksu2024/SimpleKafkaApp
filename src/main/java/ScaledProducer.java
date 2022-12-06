@@ -16,7 +16,7 @@ public class ScaledProducer {
 
         String topic_name = "topic1";
 
-        List<String> keys = new ArrayList<String>();
+        List<String> keys = new ArrayList<>();
         for(int i = 0 ; i < 10 ; i++) {
             keys.add("keys" + Integer.toString(i));
         }
@@ -25,7 +25,9 @@ public class ScaledProducer {
 
         KafkaProducer kafkaProducer = new KafkaProducer(properties);
 
-        for(long j = 0 ; j < 1000000 ; j++) {
+        // TODO: We can change the number of records to be produced here
+        long total_number_of_records = 1000;
+        for(long j = 0 ; j < total_number_of_records ; j++) {
             String curr_key = keys.get(randomGenerator.nextInt(keys.size()));
             // System.out.println(curr_key);
             ProducerRecord producerRecord = new ProducerRecord(topic_name, curr_key, "value_" + Long.toString(j));

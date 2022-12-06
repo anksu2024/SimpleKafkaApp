@@ -13,6 +13,8 @@ df = spark \
 
 df.printSchema()
 
-df.select(
+final_df = df.select(
     func.col("key").cast(StringType()).alias("key"),
-    func.col("value").cast(StringType()).alias("value")).show()
+    func.col("value").cast(StringType()).alias("value"))
+
+final_df.show()
