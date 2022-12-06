@@ -1,7 +1,5 @@
 # SimpleKafkaApp
 
-#### - WIP
-
 ## Prerequisites:
 1. Basic knowledge of `docker` and how to use `docker-compose.yml` file
 2. Install any <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>. 
@@ -14,7 +12,7 @@
 2. Assuming you are connected to a Mac System on a Secure `WiFi` connection, 
    find the IP Address of your Machine using this command:
 ```
-$ ipconfig getifaddr en0
+localmachine % ipconfig getifaddr en0
 10.0.0.78
 ```
 3. Replace `localhost` with the above Local IP Address in the following files:
@@ -27,14 +25,14 @@ d. src/main/python/pyspark_consumer.py
 4. Open the Project in IntelliJ and Build it without failures
 5. In Terminal, Create the Docker containers for the `zookeeper`, `kafka`, `spark`, `sparkworker`
 ```
-$ docker-compose -f docker-compose.yml up
+localmachine % docker-compose -f docker-compose.yml up
 ```
 6. Now check the Docker Dashboard to check the containers that are created during the process
 <img src="src/main/resources/docker_dashboard.png" />
 This can also be confirmed using the `docker ps` command
 
 ```
-$ docker ps
+localmachine % docker ps
 CONTAINER ID   IMAGE                    COMMAND                  CREATED         STATUS         PORTS                                                NAMES
 19cd6810214e   bitnami/spark:3.3        "/opt/bitnami/script…"   6 minutes ago   Up 6 minutes                                                        sparkworker
 ff51a6dc9119   bitnami/spark:3.3        "/opt/bitnami/script…"   6 minutes ago   Up 6 minutes   0.0.0.0:8989->8989/tcp                               spark
@@ -48,7 +46,7 @@ fc65a3bd7b3a   wurstmeister/zookeeper   "/bin/sh -c '/usr/sb…"   6 minutes ago
 ### SampleProducer.java
 Login in to the `kafka` container from our local machine:
 ```
-$ docker exec -it kafka /bin/sh
+localmachine % docker exec -it kafka /bin/sh
 ```
 Once there, navigate to the `/opt/kafka/bin` directory. It houses the scripts for Kafka Basic commands
 ```
@@ -83,7 +81,7 @@ This completes the Part 1. Now we want to consume this data using PySpark.
 <br />
 Lets login to the Spark Container from our local machine:
 ```
-$ docker exec -it spark /bin/sh
+localmachine % docker exec -it spark /bin/sh
 ```
 While starting Pyspark, include the 
 <a href="https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html#deploying">packages</a>
@@ -115,10 +113,11 @@ And, in pyspark, we run the code in `scaled_pyspark_consumer.py`
 
 ## Wrapping up
 It's a good practice to gracefully finishing what you started.
-<br/>This is how we can stop our `Docker` containers to run till eternity from our local machine
+<br/>
+We can stop our `Docker` containers from our local machine by:
 
 ```
-$ docker-compose -f docker-compose.yml down 
+localmachine % docker-compose -f docker-compose.yml down 
 [+] Running 5/4
  ⠿ Container sparkworker           Removed                    10.2s
  ⠿ Container spark                 Removed                    10.2s
@@ -126,6 +125,13 @@ $ docker-compose -f docker-compose.yml down
  ⠿ Container kafka                 Removed                     4.3s
  ⠿ Network simplekafkaapp_default  Removed                     0.1s
 ```
+
+After this check the status of current docker containers (assuming no other containers were running):
+```
+localmachine % docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
 <hr />
 
 #### Happy Data Pipelining!!!
