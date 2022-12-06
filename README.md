@@ -14,7 +14,7 @@
 2. Assuming you are connected to a Mac System on a Secure `WiFi` connection, 
    find the IP Address of your Machine using this command:
 ```
-$ ipconfig getifaddr en0 
+$ ipconfig getifaddr en0
 10.0.0.78
 ```
 3. Replace `localhost` with the above Local IP Address in the following files:
@@ -45,10 +45,84 @@ fc65a3bd7b3a   wurstmeister/zookeeper   "/bin/sh -c '/usr/sb…"   6 minutes ago
 7. Now, we are ready to proceed to the implementation
 
 ## Implementation
+### SampleProducer.java
+Login in to the `kafka` container from our local machine:
+```
+$ docker exec -it kafka /bin/sh
+```
+Once there, navigate to the `/opt/kafka/bin` directory. It houses the scripts for Kafka Basic commands
+```
+# cd /opt/kafka/bin
+```
+There we can see all the topics mentioned in the `KAFKA_CREATE_TOPICS` tag in `docker-compose.yml`:
+```
+# ./kafka-topics.sh --list --zookeeper zookeeper:2181
+mychannel1
+topic1
+```
+We can initiate the `kafka` consumer to listen to `mychannel1` topic:
+```
+# ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic mychannel1 --from-beginning
+```
+Add the configurations in `IntelliJ` to execute the `SampleProducer.java` App
+<img src="src/main/resources/Config_for_SampleProducer.png" />
 
+Now run the Application.
+<br />
+In the Terminal Window where Kafka Consumer is listening to the `mychannel1` Topic:
+```
+# ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic mychannel1 --from-beginning
+ironman
+thor
+hulk
+spiderman
+blackwidow
+gamura
+```
+This completes the Part 1. Now we want to consume this dat using Spark.
+<br />
+Lets login to the Spark Container from our local machine:
+```
+$ docker exec -it spark /bin/sh
+```
+While starting Pyspark, include the 
+<a href="https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html#deploying">packages</a>
+for kafka Streaming Integration in Pyspark Structured Streaming
+```
+$ pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1
+```
+Next, execute the commands given in the `sample_pyspark_consumer.py`:
+```
+import pyspark.sql.functions as func
+from pyspark.sql.types import StringType
+
+# TODO: Replace `localhost` with the IP Address of your Local Machine
+df = spark \
+    .read \
+    .format("kafka") \
+    .option("kafka.bootstrap.servers", "10.0.0.78:9092") \
+    .option("subscribe", "mychannel1") \
+    .load()
+
+df.printSchema()
+
+df.select(
+    func.col("key").cast(StringType()).alias("key"),
+    func.col("value").cast(StringType()).alias("value")).show()
++----+----------+                                                               
+| key|     value|
++----+----------+
+|name|   ironman|
+|name|      thor|
+|name|      hulk|
+|name| spiderman|
+|name|blackwidow|
+|name|    gamura|
++----+----------+
+```
 
 ## Wrapping up
-It's a good practice to gracefully finshing what you started.
+It's a good practice to gracefully finishing what you started.
 <br/>This is how we can stop our `Docker` containers to run till eternity from our local machine
 
 ```
